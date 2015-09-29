@@ -1,0 +1,6 @@
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\bin\Debug\Giphy.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\bin\Debug\Giphy.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\bin\Debug\RestSharp.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\bin\Debug\RestSharp.xml
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\obj\Debug\Giphy.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Giphy\obj\Debug\Giphy.pdb

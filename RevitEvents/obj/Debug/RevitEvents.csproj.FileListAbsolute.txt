@@ -1,0 +1,12 @@
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\RevitEvents.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\RevitEvents.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\Giphy.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\Newtonsoft.Json.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\RestSharp.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\Slack.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\Giphy.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\Slack.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\bin\Debug\RestSharp.xml
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\obj\Debug\RevitEvents.csprojResolveAssemblyReference.cache
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\obj\Debug\RevitEvents.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitEvents\obj\Debug\RevitEvents.pdb

@@ -1,0 +1,15 @@
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RevitSlack.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RevitSlack.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RestSharp.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RevitEvents.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\Slack.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\Giphy.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RevitEvents.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\Slack.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\RestSharp.xml
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\bin\Debug\Giphy.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\obj\Debug\RevitSlack.csprojResolveAssemblyReference.cache
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\obj\Debug\RevitSlack.SlackForm.resources
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\obj\Debug\RevitSlack.csproj.GenerateResource.Cache
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\obj\Debug\RevitSlack.dll
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\RevitSlack\obj\Debug\RevitSlack.pdb

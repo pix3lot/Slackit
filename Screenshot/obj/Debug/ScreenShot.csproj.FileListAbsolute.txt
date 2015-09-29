@@ -1,0 +1,5 @@
+C:\Users\bmuller\Documents\Visual Studio 2013\Projects\SlackIt\Screenshot\bin\Debug\Screenshot.dll
+C:\Users\bmuller\Documents\Visual Studio 2013\Projects\SlackIt\Screenshot\bin\Debug\Screenshot.pdb
+C:\Users\bmuller\Documents\Visual Studio 2013\Projects\SlackIt\Screenshot\obj\Debug\Screenshot.dll
+C:\Users\bmuller\Documents\Visual Studio 2013\Projects\SlackIt\Screenshot\obj\Debug\Screenshot.pdb
+C:\Users\bmuller\documents\visual studio 2013\Projects\SlackIt\Screenshot\obj\Debug\ScreenShot.csprojResolveAssemblyReference.cache
