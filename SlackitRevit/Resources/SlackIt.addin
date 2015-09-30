@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>SlackIt</Name>
+	<FullClassName>SlackitRevit.SlackRibbon</FullClassName>
+    <Assembly>SlackitRevit.dll</Assembly>
+    <AddInId>B67846E5-805A-44E4-AF1B-F4538AE5F6D7</AddInId>
+    <VendorId>PIX3</VendorId>
+    <VendorDescription>AEC Hackathon - pix3lot</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>SlackIt Events</Name>
+	<FullClassName>SlackitRevit.EventsApplication</FullClassName>
+    <Assembly>SlackitRevit.dll</Assembly>
+    <AddInId>973A347F-56D6-4D46-8BA1-B061EF91F590</AddInId>
+    <VendorId>PIX3</VendorId>
+    <VendorDescription>AEC Hackathon - pix3lot</VendorDescription>
+  </AddIn>
+</RevitAddIns>
