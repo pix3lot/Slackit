@@ -22,9 +22,14 @@ namespace SlackitRevit
         /// String Slack Token
         /// </summary>
         public static string slackToken { get; set; }
-
-        public static List<string> slackChannelName { get; set; }
-        public static Dictionary<string, string> slackChannelNameId { get; set; }
+        ///// <summary>
+        ///// List Slack Channel Names
+        ///// </summary>
+        //public static List<string> slackChannelName { get; set; }
+        ///// <summary>
+        ///// Dictionary Slack Channel Name & Id
+        ///// </summary>
+        //public static Dictionary<string, string> slackChannelNameId { get; set; }
 
 
         /// <summary>

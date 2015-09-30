@@ -8,8 +8,6 @@ using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-//using Autodesk.Revit.UI.Selection;
-//using Autodesk.Revit.DB.ExtensibleStorage;
 using Slack;
 using RestSharp;
 using Newtonsoft.Json;
@@ -22,15 +20,13 @@ namespace SlackitRevit
 
     public class SlackCommand : IExternalCommand
     {
-        //public static List<string> chlist { get; set; }
-        //public static Dictionary<string, string> chdict { get; set; }
-
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            SlackForm form = new SlackForm();
-            form.ShowDialog();
+            SlackForm slackForm = new SlackForm();
 
-            if (form.DialogResult == DialogResult.OK)
+            slackForm.ShowDialog();
+
+            if (slackForm.DialogResult == DialogResult.OK)
             {
                 Document doc = commandData.Application.ActiveUIDocument.Document;
                 Autodesk.Revit.ApplicationServices.Application app = doc.Application;
@@ -47,11 +43,11 @@ namespace SlackitRevit
                 s.slackToken = Variables.slackToken;
 
                 SharedParam.SetParameter(app, doc, Variables.defNameSettings, JsonConvert.SerializeObject(s).ToString());
-            }
 
+            }
             return Result.Succeeded;
         }
-
-     }
+    
+    }
 
 }
