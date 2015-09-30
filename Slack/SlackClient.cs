@@ -16,8 +16,8 @@ namespace Slack
 
         public SlackClient(string token)
         {
-            this.token = token;
-            this.client = new RestClient(Constants.Urls.baseurl);
+                this.token = token;
+                this.client = new RestClient(Constants.Urls.baseurl);
         }
         
         public IRestResponse<ChannelsListResponse> GetChannelsList(bool excludeArchived)
@@ -74,12 +74,6 @@ namespace Slack
             var uri = string.Format(Constants.Files.Upload, this.token, file, channel);
         }
     }
-    public class Settings
-    {
-        public bool slackOn;
-        public string slackCh;
-        public string slackChId;
-        public string slackToken;
-    }
+
 }
 
