@@ -24,10 +24,10 @@ namespace SlackitRevit
             RibbonPanel ribbonPanelTools = app.CreateRibbonPanel("Slackit");
 
             PushButton pushBtnSlackSettings = ribbonPanelTools.AddItem(new PushButtonData("SlackitSettings", "Settings", assemblyDir + "SlackitRevit.dll", "SlackitRevit.SlackCommand")) as PushButton;
-            pushBtnSlackSettings.LargeImage = new BitmapImage(new Uri(imageDir + "Slackit.png"));
+            pushBtnSlackSettings.LargeImage = new BitmapImage(new Uri(imageDir + "SlackitLogo_32.png"));
 
             PushButton pushBtnSlackCapture = ribbonPanelTools.AddItem(new PushButtonData("SlackitCapture", "Screenshot", assemblyDir + "SlackitRevit.dll", "SlackitRevit.CaptureCommand")) as PushButton;
-            pushBtnSlackCapture.LargeImage = new BitmapImage(new Uri(imageDir + "Slackit.png"));
+            pushBtnSlackCapture.LargeImage = new BitmapImage(new Uri(imageDir + "SlackitLogo_32.png"));
 
             return Result.Succeeded;
         }
