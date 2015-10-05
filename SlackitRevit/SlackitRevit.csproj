@@ -114,7 +114,7 @@ copy "$(ProjectDir)bin\debug\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\20
 copy "$(ProjectDir)bin\debug\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)bin\debug\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)Resources\SlackIt.addin" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)Resources\img\SlackPost_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)Resources\Img\SlackIt.png" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

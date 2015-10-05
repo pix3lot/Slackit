@@ -38,10 +38,10 @@ namespace SlackitRevit
                 {
                     g.CopyFromScreen(System.Drawing.Point.Empty, System.Drawing.Point.Empty, bounds.Size);
                 }
-                bitmap.Save("C://SceenCapture.jpg", ImageFormat.Jpeg);
+                bitmap.Save(@"C:\Temp\SlackitCapture.jpg", ImageFormat.Jpeg);
             }
 
-            FileStream str = File.OpenRead("C://SceenCapture.jpg");
+            FileStream str = File.OpenRead(@"C:\Temp\SlackitCapture.jpg");
             byte[] fBytes = new byte[str.Length];
             str.Read(fBytes, 0, fBytes.Length);
             str.Close();
@@ -50,16 +50,16 @@ namespace SlackitRevit
             string boundary = "------------------------" + DateTime.Now.Ticks.ToString("x");
             webClient.Headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
             var fileData = webClient.Encoding.GetString(fBytes);
-            var package = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n", boundary, "Testing.txt", "multipart/form-data", fileData);
+            var package = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n", boundary, "Slackit Capture", "multipart/form-data", fileData);
 
             var nfile = webClient.Encoding.GetBytes(package);
-            string url = "https://slack.com/api/files.upload?token=" + Variables.slackToken + "&content=" + nfile + "&channels=[" + Variables.slackChId + "]";
+            string url = "https://slack.com/api/files.upload?token=" + Variables.slackToken + "&content=" + nfile + "&channels=" + Variables.slackChId;
 
             byte[] resp = webClient.UploadData(url, "POST", nfile);
 
             var k = System.Text.Encoding.Default.GetString(resp);
-            Console.WriteLine(k);
-            Console.ReadKey();
+            //Console.WriteLine(k);
+            //Console.ReadKey();
 
             return Result.Succeeded;
         }
