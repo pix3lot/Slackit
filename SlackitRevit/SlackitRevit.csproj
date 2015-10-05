@@ -94,18 +94,19 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SlackForm.resx">
       <DependentUpon>SlackForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\SlackitLogo_128.png" />
+    <Content Include="Resources\SlackitLogo_32.png" />
     <None Include="Properties\DataSources\SlackForm.datasource" />
-    <None Include="Resources\img\SlackitLogoSmall.png" />
-    <None Include="Resources\img\SlackitLogoBig.png" />
-    <Content Include="Resources\img\SlackPost_32.png" />
-    <Content Include="Resources\SlackIt.addin" />
+    <Content Include="Resources\Slackit.addin" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)bin\debug\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
@@ -113,8 +114,8 @@ copy "$(ProjectDir)bin\debug\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\20
 copy "$(ProjectDir)bin\debug\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)bin\debug\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)bin\debug\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)Resources\SlackIt.addin" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)Resources\Img\SlackIt.png" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

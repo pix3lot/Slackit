@@ -6,7 +6,7 @@
     <Assembly>SlackitRevit.dll</Assembly>
     <AddInId>B67846E5-805A-44E4-AF1B-F4538AE5F6D7</AddInId>
     <VendorId>PIX3</VendorId>
-    <VendorDescription>AEC Hackathon - pix3lot</VendorDescription>
+    <VendorDescription>AEC Hackathon 2015 - pix3lot - Ben Muller</VendorDescription>
   </AddIn>
   <AddIn Type="Application">
     <Name>SlackIt Events</Name>
@@ -14,6 +14,6 @@
     <Assembly>SlackitRevit.dll</Assembly>
     <AddInId>973A347F-56D6-4D46-8BA1-B061EF91F590</AddInId>
     <VendorId>PIX3</VendorId>
-    <VendorDescription>AEC Hackathon - pix3lot</VendorDescription>
+    <VendorDescription>AEC Hackathon - pix3lot - Ben Muller</VendorDescription>
   </AddIn>
 </RevitAddIns>
