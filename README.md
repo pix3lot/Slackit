@@ -18,12 +18,12 @@ Messages included so far:
 * Central model was opened
 * User closed the file without synching to central
 
+Screenshot button sends full screenshot to project channel
+
 ##Future development
 Include groups and DMs
 
-Add screen capture and post utility (current one doesn't work yet)
-
-Ability to post messages built into the Revit ribbon
+Ability to post custom messages built into the Revit ribbon
 
 More messaging options 
   * File size
