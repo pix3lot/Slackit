@@ -9,7 +9,8 @@ using Autodesk;
 using Giphy;
 using Slack;
 using Newtonsoft.Json;
-
+using System.Diagnostics;
+using System.Linq;
 
 namespace SlackitRevit
 {
@@ -21,6 +22,9 @@ namespace SlackitRevit
         List<string> msgts_synch = new List<string>();
         List<string> msgts_model = new List<string>();
         List<string> msgts_ws = new List<string>();
+        Dictionary<int, string> _start_state = null;
+        IEnumerable<Element> a = null;
+        //List<string> msgts_pin = new List<string>();
 
         public Result OnStartup(UIControlledApplication uicapp)
         {
@@ -146,12 +150,62 @@ namespace SlackitRevit
                             image_url = gif_url
                         //image_url = Slack.Constants.image_url_warning
                         //thumb_url = Slack.Constants.thumb_url_warning
-                    };
 
+                    };
+                    if (!Variables.giphyOn) { gif_url = null; };
                     string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                     var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
                     msgts_ws.Add(resp.ts);
                 }
+            }
+            #endregion
+
+            #region Start Logging Pinned Elements
+            IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
+            _start_state = TrackChanges.Command.GetSnapshot(a);
+
+            #endregion
+
+            #region Slack Post: Pinned Tracking Started
+
+            if (Variables.slackOn)
+            {
+
+                var slackClient = new SlackClient(Variables.slackToken);
+
+                //Delete previous synching message
+                //slackClient.DeleteMessage(msgts_pin, Variables.slackCh);
+                //msgts_pin.Clear();
+
+                //Post synched message
+                string text = "";
+                string channel = Variables.slackChId;
+                string botname = "Pinning Info";
+                //string parse = null;
+                //bool linkNames = false;
+                //bool unfurl_links = false;
+                string icon_url = Variables.icon_revit;
+                //string icon_emoji = null;    
+
+                var attachments = new Attachments
+                {
+                    fallback = Variables.logUsername + "has started tracking pinned elements.",
+                    color = "good",
+                    fields =
+                        new Fields[]
+                        {
+                            new Fields
+                            {
+                                title = "Status",
+                                value = Variables.logUsername + " has started tracking pinned elements.\n[" + Variables.logFileCentralName + "]",
+                                @short = true
+                            }
+                        }
+                };
+
+                string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
+                var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
+
             }
             #endregion
 
@@ -160,6 +214,17 @@ namespace SlackitRevit
         {
             Variables.logSyncStart = DateTime.Now;
             Variables.logSyncComments = e.Comments;
+            Document doc = e.Document;
+
+            #region Report Differences after Sync
+            IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
+            Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
+            var first = end_state.First();
+            string msg = first.Value;
+            Debug.Print("END STATE: " + msg);
+            string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
+            _start_state = TrackChanges.Command.GetSnapshot(a);
+            #endregion
 
             #region Slack Post: Synchronizing to Central
 
@@ -185,6 +250,12 @@ namespace SlackitRevit
                                 value = Variables.logUsername + " is synching to central [" + Variables.logFileCentralName + "]\nAvoid synching until this is complete.",
                                 @short = true
                             },
+                            new Fields
+                            {
+                                title = "Pinned Elements",
+                                value = results,
+                                @short = true
+                            }
                         }
                 };
 
@@ -200,6 +271,18 @@ namespace SlackitRevit
         {
             Variables.logSyncEnd = DateTime.Now;
             Variables.logSyncDuration = Variables.logSyncEnd - Variables.logSyncStart;
+            Document doc = e.Document;
+
+            #region Report Differences after Sync
+            IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
+            Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
+            var first = end_state.First();
+            string msg = first.Value;
+            Debug.Print("END STATE: " + msg);
+            string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
+            _start_state = TrackChanges.Command.GetSnapshot(a);
+
+            #endregion
 
             #region Slack Post: Synchronized to Central
 
@@ -247,11 +330,12 @@ namespace SlackitRevit
                             }
                         },
                     image_url = gif_url
+
                 };
 
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
-
+                if (!Variables.giphyOn) { gif_url = null; };
             }
             #endregion
 
@@ -316,6 +400,7 @@ namespace SlackitRevit
                     string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                     var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
                     msgts_ws.Add(resp.ts);
+                    if (!Variables.giphyOn) { gif_url = null; };
                 }
             }
             #endregion

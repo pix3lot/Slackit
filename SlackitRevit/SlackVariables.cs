@@ -70,6 +70,7 @@ namespace SlackitRevit
         public static bool logIsWorkshared { get; set; }
 
         public static string logSyncComments { get; set; }
+        public static bool giphyOn { get; internal set; }
 
         public static string defNameSettings = "SlackitSettings";
         public static string spFilePath = dir_temp + "sp.txt";
