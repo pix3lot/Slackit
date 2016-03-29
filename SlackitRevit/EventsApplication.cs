@@ -87,6 +87,7 @@ namespace SlackitRevit
                 Variables.slackCh = ds.slackCh;
                 Variables.slackChId = ds.slackChId;
                 Variables.slackOn = ds.slackOn;
+                Variables.giphyOn = ds.giphyOn;
                 Variables.slackToken = ds.slackToken;
             }
 
@@ -121,6 +122,8 @@ namespace SlackitRevit
                     string botname = "Worksharing Warning";
                     string icon_url = Variables.icon_revit;
 
+                    if (!Variables.giphyOn) { gif_url = null; };
+
                     var attachments = new Attachments
                     {
                         fallback = Variables.logUsername + "has opened the central model",
@@ -152,7 +155,7 @@ namespace SlackitRevit
                         //thumb_url = Slack.Constants.thumb_url_warning
 
                     };
-                    if (!Variables.giphyOn) { gif_url = null; };
+                    
                     string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                     var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
                     msgts_ws.Add(resp.ts);
@@ -308,6 +311,7 @@ namespace SlackitRevit
                 //bool unfurl_links = false;
                 string icon_url = Variables.icon_revit;
                 //string icon_emoji = null;    
+                if (!Variables.giphyOn) { gif_url = null; };
 
                 var attachments = new Attachments
                 {
@@ -332,10 +336,10 @@ namespace SlackitRevit
                     image_url = gif_url
 
                 };
-
+                
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
-                if (!Variables.giphyOn) { gif_url = null; };
+                
             }
             #endregion
 
@@ -369,6 +373,9 @@ namespace SlackitRevit
                     string channel = Variables.slackChId;
                     string botname = "Worksharing Warning";
                     string icon_url = Variables.icon_revit;
+
+                    if (!Variables.giphyOn) { gif_url = null; };
+
                     var attachments = new Attachments
                     {
                         fallback = Variables.logUsername + "did not save to central before closing",
@@ -397,10 +404,11 @@ namespace SlackitRevit
                             },
                         image_url = gif_url
                     };
+                    
                     string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                     var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
                     msgts_ws.Add(resp.ts);
-                    if (!Variables.giphyOn) { gif_url = null; };
+                    
                 }
             }
             #endregion

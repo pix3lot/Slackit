@@ -31,6 +31,7 @@ namespace SlackitRevit
         public SlackForm()
         {
             enabled = Variables.slackOn;
+            giphyEnabled = Variables.giphyOn;
             channel = Variables.slackCh;
             channelid = Variables.slackChId;
             token = Variables.slackToken;

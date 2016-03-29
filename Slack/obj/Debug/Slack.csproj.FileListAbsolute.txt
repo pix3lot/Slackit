@@ -43,3 +43,13 @@ C:\Users\bmuller\Documents\GitHub\Slackit\Slack\obj\Debug\Slack.Properties.Resou
 C:\Users\bmuller\Documents\GitHub\Slackit\Slack\obj\Debug\Slack.csproj.GenerateResource.Cache
 C:\Users\bmuller\Documents\GitHub\Slackit\Slack\obj\Debug\Slack.dll
 C:\Users\bmuller\Documents\GitHub\Slackit\Slack\obj\Debug\Slack.pdb
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\bin\Debug\Slack.dll
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\bin\Debug\Slack.pdb
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\bin\Debug\RestSharp.dll
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\bin\Debug\RestSharp.xml
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\obj\Debug\Slack.csprojResolveAssemblyReference.cache
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\obj\Debug\Slack.Properties.Resources.resources
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\obj\Debug\Slack.csproj.GenerateResource.Cache
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\obj\Debug\Slack.dll
+C:\Users\dsiroky\Source\Repos\Slackit\Slack\obj\Debug\Slack.pdb

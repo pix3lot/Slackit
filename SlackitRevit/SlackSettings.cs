@@ -132,7 +132,7 @@ namespace SlackitRevit
             return def;
         }
 
-        public static Guid SharedParamGUID(Autodesk.Revit.ApplicationServices.Application app, string defGroup, string defName)
+        public static Guid SharedParamGUID(Application app, string defGroup, string defName)
         {
             Guid guid = Guid.Empty;
             try
@@ -150,7 +150,7 @@ namespace SlackitRevit
             return guid;
         }
 
-        public static void SetParameter(Autodesk.Revit.ApplicationServices.Application app, Document doc, string defname, string p_inst)
+        public static void SetParameter(Application app, Document doc, string defname, string p_inst)
         {
             DefinitionFile defFile = GetSharedParamFile(app, Variables.spFilePath);
             DefinitionGroup defGroup = GetOrCreateSharedParamsGroup(defFile, Variables.groupName);
@@ -205,6 +205,7 @@ namespace SlackitRevit
     public class SlackSettings
     {
         public bool slackOn;
+        public bool giphyOn;
         public string slackCh;
         public string slackChId;
         public string slackToken;
