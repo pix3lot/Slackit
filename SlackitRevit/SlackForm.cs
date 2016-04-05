@@ -20,6 +20,7 @@ namespace SlackitRevit
         private BindingList<String> bList;
 
         internal bool enabled { get; set; }
+        internal bool giphyEnabled { get; set;  }
         internal string channel { get; set; }
         internal string channelid { get; set; }
         private string token { get; set; }
@@ -30,6 +31,7 @@ namespace SlackitRevit
         public SlackForm()
         {
             enabled = Variables.slackOn;
+            giphyEnabled = Variables.giphyOn;
             channel = Variables.slackCh;
             channelid = Variables.slackChId;
             token = Variables.slackToken;
@@ -53,6 +55,8 @@ namespace SlackitRevit
             textbox_token.Text = token;
             combobox_channels.SelectedItem = channel;
             checkbox_enable.Checked = enabled;
+            checkBox_gifs.Checked = giphyEnabled;
+
         }
 
         private void slackSave_Click(object sender, EventArgs e)
@@ -69,6 +73,7 @@ namespace SlackitRevit
                 Variables.slackCh = s;
                 Variables.slackChId = id;
                 Variables.slackOn = checkbox_enable.Checked;
+                Variables.giphyOn = checkBox_gifs.Checked;
                 Variables.slackToken = token;
              }
             catch

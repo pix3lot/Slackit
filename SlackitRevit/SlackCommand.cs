@@ -40,6 +40,7 @@ namespace SlackitRevit
                 s.slackCh = Variables.slackCh;
                 s.slackChId = Variables.slackChId;
                 s.slackOn = Variables.slackOn;
+                s.giphyOn = Variables.giphyOn;
                 s.slackToken = Variables.slackToken;
 
                 SharedParam.SetParameter(app, doc, Variables.defNameSettings, JsonConvert.SerializeObject(s).ToString());

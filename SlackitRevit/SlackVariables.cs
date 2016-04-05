@@ -30,6 +30,7 @@ namespace SlackitRevit
         ///// Dictionary Slack Channel Name & Id
         ///// </summary>
         //public static Dictionary<string, string> slackChannelNameId { get; set; }
+        public static bool giphyOn { get; set; }
 
 
         /// <summary>
