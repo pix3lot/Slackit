@@ -69,6 +69,9 @@ namespace SlackitRevit
             Variables.logFileName = doc.Title;
             Variables.logFilePath = doc.PathName;
             Variables.logFileSize = f.Length;
+            var logCentralFileSize = Variables.logFileCentralName;
+            FileInfo central = new FileInfo(Variables.logFileCentral);
+            var size = central.Length / 1000000;
 
             Variables.logUsername = app.Username;
             Variables.logVersionBuild = app.VersionBuild;
@@ -179,7 +182,7 @@ namespace SlackitRevit
                 //Delete previous synching message
                 //slackClient.DeleteMessage(msgts_pin, Variables.slackCh);
                 //msgts_pin.Clear();
-
+                
                 //Post synched message
                 string text = "";
                 string channel = Variables.slackChId;
@@ -200,7 +203,7 @@ namespace SlackitRevit
                             new Fields
                             {
                                 title = "Status",
-                                value = Variables.logUsername + " has started tracking pinned elements.\n[" + Variables.logFileCentralName + "]",
+                                value = Variables.logUsername + " has started tracking pinned elements.\n[" + Variables.logFileCentralName + " (Size: "+ size + "MB]",
                                 @short = true
                             }
                         }
@@ -208,6 +211,9 @@ namespace SlackitRevit
 
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
+
+                Sandbox.Program.Main();
+                slackClient.UploadFile(@"C:\Temp\chart.png", channel);
 
             }
             #endregion
