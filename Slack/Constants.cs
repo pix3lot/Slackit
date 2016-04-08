@@ -30,7 +30,7 @@ namespace Slack
         }
         internal class Files
         {
-            internal const string Upload = "files.upload?token={0}&file={1}&channel={2}";
+            internal const string Upload = "files.upload?token={0}&channels={1}";
         }
     }
 

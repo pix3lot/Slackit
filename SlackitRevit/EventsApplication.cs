@@ -11,6 +11,7 @@ using Slack;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace SlackitRevit
 {
@@ -57,7 +58,7 @@ namespace SlackitRevit
 
             BasicFileInfo fileInfo = BasicFileInfo.Extract(path);
             FileInfo f = new FileInfo(path);
-
+            
             Variables.logComputerName = System.Environment.MachineName;
             Variables.logChangesSaved = fileInfo.AllLocalChangesSavedToCentral;
             Variables.logFileCentral = fileInfo.CentralPath;
@@ -70,8 +71,7 @@ namespace SlackitRevit
             Variables.logFilePath = doc.PathName;
             Variables.logFileSize = f.Length;
             var logCentralFileSize = Variables.logFileCentralName;
-            FileInfo central = new FileInfo(Variables.logFileCentral);
-            var size = central.Length / 1000000;
+ 
 
             Variables.logUsername = app.Username;
             Variables.logVersionBuild = app.VersionBuild;
@@ -203,7 +203,7 @@ namespace SlackitRevit
                             new Fields
                             {
                                 title = "Status",
-                                value = Variables.logUsername + " has started tracking pinned elements.\n[" + Variables.logFileCentralName + " (Size: "+ size + "MB]",
+                                value = Variables.logUsername + " has started tracking pinned elements.\n[" + Variables.logFileCentralName + "]",
                                 @short = true
                             }
                         }
@@ -212,8 +212,6 @@ namespace SlackitRevit
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
 
-                Sandbox.Program.Main();
-                slackClient.UploadFile(@"C:\Temp\chart.png", channel);
 
             }
             #endregion
@@ -278,9 +276,26 @@ namespace SlackitRevit
 
         private void appDocSynched(object sender, Autodesk.Revit.DB.Events.DocumentSynchronizedWithCentralEventArgs e)
         {
+            
             Variables.logSyncEnd = DateTime.Now;
             Variables.logSyncDuration = Variables.logSyncEnd - Variables.logSyncStart;
             Document doc = e.Document;
+
+            string path = doc.PathName;
+            BasicFileInfo fileInfo = BasicFileInfo.Extract(path);
+
+            FileInfo f = new FileInfo(fileInfo.CentralPath);
+            var size = f.Length / 1000000;
+            int intsize = Convert.ToInt32(size);
+            string folder = f.DirectoryName;
+            var csv = new StringBuilder();
+            var date = DateTime.Now.ToString();
+            var stringSize = intsize.ToString();
+            var newLine = string.Format("{0},{1}", date, stringSize);
+            csv.AppendLine(newLine);
+            string logPath = folder + "\\fileSizelog.csv";
+            Debug.Print(logPath);
+            File.AppendAllText(logPath, csv.ToString());
 
             #region Report Differences after Sync
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
@@ -329,7 +344,7 @@ namespace SlackitRevit
                             new Fields
                             {
                                 title = "Status",
-                                value = Variables.logUsername + " has synched to central.\n[" + Variables.logFileCentralName + "]",
+                                value = Variables.logUsername + " has synched to central.\n[" + Variables.logFileCentralName + " (Size: "+ size + "MB) ]",
                                 @short = true
                             },
                             new Fields
@@ -345,7 +360,11 @@ namespace SlackitRevit
                 
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
-                
+
+                Sandbox.Program.Main(logPath);
+                string upload_response = slackClient.UploadFile(@"C:\Temp\chart.png", channel).Content;
+                var uploadresp = JsonConvert.DeserializeObject<UploadResponse>(upload_response);
+
             }
             #endregion
 

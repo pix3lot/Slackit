@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using RestSharp;
 using Newtonsoft.Json;
+
 
 namespace Slack
 {
@@ -69,9 +72,24 @@ namespace Slack
             }
         }
 
-       public void UploadFile(string file, string channel)
+        public IRestResponse<UploadResponse> UploadFile(string file, string channel)
         {
-            var uri = string.Format(Constants.Files.Upload, this.token, file, channel);
+            byte[] f = System.IO.File.ReadAllBytes(file);
+
+            var webClient = new WebClient();
+            string boundary = "------------------------" + DateTime.Now.Ticks.ToString("x");
+            webClient.Headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+            var fileData = webClient.Encoding.GetString(f);
+            var package = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n", boundary, "Slackit Capture", "multipart/form-data", fileData);
+
+            var nfile = webClient.Encoding.GetBytes(package);
+
+            var uri = string.Format(Constants.Files.Upload, this.token, channel);
+            var request = new RestRequest(uri, Method.POST);
+            request.AddFile("file", file);
+            
+            IRestResponse<UploadResponse> response = client.Execute<UploadResponse>(request);
+            return response;
         }
     }
 

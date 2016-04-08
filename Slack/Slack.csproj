@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Responses\ChannelsCreateResponse.cs" />
     <Compile Include="Responses\ChannelsListResponse.cs" />
+    <Compile Include="Responses\UploadResponse.cs" />
     <Compile Include="Responses\ChatDeleteResponse.cs" />
     <Compile Include="Responses\ChatPostMessageResponse.cs" />
     <Compile Include="Responses\Response.cs" />

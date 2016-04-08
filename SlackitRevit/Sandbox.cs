@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -6,52 +9,52 @@ namespace Sandbox
 {
     class Program
     {
-        static public void Main()
+        static public void Main(string path)
         {
-            // set up some data
-            var xvals = new[]
-                {
-                    new DateTime(2012, 4, 4),
-                    new DateTime(2012, 4, 5),
-                    new DateTime(2012, 4, 6),
-                    new DateTime(2012, 4, 7)
-                };
-            var yvals = new[] { 1, 3, 7, 12 };
+
+            var reader = new StreamReader(File.OpenRead(path));
+            List<string> dateString = new List<string>();
+            List<string> sizeString = new List<string>();
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+
+                dateString.Add(values[0]);
+                sizeString.Add(values[1]);
+            }
+            List<DateTime> xvals = dateString.Select(date => DateTime.Parse(date)).ToList();
+            List<int> yvals = sizeString.Select(int.Parse).ToList();
 
             // create the chart
             var chart = new Chart();
-            chart.Size = new Size(600, 250);
+            chart.Size = new Size(800, 450);
 
             var chartArea = new ChartArea();
             chartArea.AxisX.LabelStyle.Format = "dd/MMM\nhh:mm";
-            chartArea.AxisX.MajorGrid.LineColor = Color.LightGray;
+            chartArea.AxisY.Title ="Model Size in MB)";
+            //chartArea.AxisY.LabelStyle.Format = "{0}MB";
+            chartArea.AxisX.MajorGrid.LineColor = Color.White;
             chartArea.AxisY.MajorGrid.LineColor = Color.LightGray;
-            chartArea.AxisX.LabelStyle.Font = new Font("Consolas", 8);
-            chartArea.AxisY.LabelStyle.Font = new Font("Consolas", 8);
+            chartArea.AxisX.LabelStyle.Font = new Font("Segoe UI", 8);
+            chartArea.AxisY.LabelStyle.Font = new Font("Segoe UI", 8);
             chart.ChartAreas.Add(chartArea);
 
             var series = new Series();
             series.Name = "Series1";
             series.ChartType = SeriesChartType.FastLine;
             series.XValueType = ChartValueType.DateTime;
+            series.BorderWidth = 2;
             chart.Series.Add(series);
 
             // bind the datapoints
             chart.Series["Series1"].Points.DataBindXY(xvals, yvals);
 
-            // copy the series and manipulate the copy
-            chart.DataManipulator.CopySeriesValues("Series1", "Series2");
-            chart.DataManipulator.FinancialFormula(
-                FinancialFormula.WeightedMovingAverage,
-                "Series2"
-            );
-            chart.Series["Series2"].ChartType = SeriesChartType.FastLine;
-
             // draw!
             chart.Invalidate();
 
             // write out a file
-            chart.SaveImage("C:\\Temp\\chart.png", ChartImageFormat.Png);
+            chart.SaveImage(@"C:\Temp\chart.png", ChartImageFormat.Png);
         }
     }
 }
