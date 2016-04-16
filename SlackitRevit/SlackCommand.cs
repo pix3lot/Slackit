@@ -35,16 +35,14 @@ namespace SlackitRevit
                 {
                     TaskDialog.Show("Exception", "These settings can only be saved while in a Revit project, not in a Family.");
                 }
-
                 SlackSettings s = new SlackSettings();
                 s.slackCh = Variables.slackCh;
                 s.slackChId = Variables.slackChId;
                 s.slackOn = Variables.slackOn;
                 s.giphyOn = Variables.giphyOn;
                 s.slackToken = Variables.slackToken;
-
-                SharedParam.SetParameter(app, doc, Variables.defNameSettings, JsonConvert.SerializeObject(s).ToString());
-
+                //SharedParam.SetParameter(app, doc, Variables.defNameSettings, JsonConvert.SerializeObject(s).ToString());
+                SlackitExtStoSettings.SetParameters(app, doc, Variables.defNameSettings, s);
             }
             return Result.Succeeded;
         }

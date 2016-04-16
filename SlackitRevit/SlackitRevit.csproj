@@ -61,7 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CaptureCommand.cs" />
-    <Compile Include="Sandbox.cs" />
+    <Compile Include="Charting.cs" />
+    <Compile Include="ExtensibleStorage.cs" />
     <Compile Include="TrackChanges.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

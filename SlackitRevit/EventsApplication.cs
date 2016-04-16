@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk;
 using Giphy;
@@ -70,8 +71,6 @@ namespace SlackitRevit
             Variables.logFileName = doc.Title;
             Variables.logFilePath = doc.PathName;
             Variables.logFileSize = f.Length;
-            var logCentralFileSize = Variables.logFileCentralName;
- 
 
             Variables.logUsername = app.Username;
             Variables.logVersionBuild = app.VersionBuild;
@@ -79,29 +78,63 @@ namespace SlackitRevit
             Variables.logVersionNumber = app.VersionNumber;
             #endregion
 
-            #region Load settings if they exist
-            Element el = Collectors.GetProjectInfoElem(doc);
+            #region Load settings if they exist (Shared Parameters)
+            //Element el = Collectors.GetProjectInfoElem(doc);
 
-            try
+            //try
+            //{
+            //    string st = el.LookupParameter(Variables.defNameSettings).AsString();
+
+            //    SlackSettings ds = JsonConvert.DeserializeObject<SlackSettings>(st);
+
+                
+
+            //    Variables.slackCh = ds.slackCh;
+            //    Variables.slackChId = ds.slackChId;
+            //    Variables.slackOn = ds.slackOn;
+            //    Variables.giphyOn = ds.giphyOn;
+            //    Variables.slackToken = ds.slackToken;
+            //}
+
+            //catch
+            //{
+            //    Variables.slackCh = null;
+            //    Variables.slackChId = null;
+            //    Variables.slackOn = false;
+            //    Variables.slackToken = null;
+            //}
+
+            #endregion
+
+            #region Load settings if they exist (Extensible Storage)
+            ExtensibleStorageFilter fi
+              = new ExtensibleStorageFilter(
+                  SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid);
+            
+            DataStorage dataStorage
+                = new FilteredElementCollector(doc)
+                .OfClass(typeof(DataStorage))
+                .WherePasses(fi)
+                .Where<Element>(el => Variables.defNameSettings.Equals(el.Name))
+                .FirstOrDefault<Element>() as DataStorage;
+
+            if ( dataStorage != null)
             {
-                string st = el.LookupParameter(Variables.defNameSettings).AsString();
-                SlackSettings ds = JsonConvert.DeserializeObject<SlackSettings>(st);
+                Entity entity = dataStorage.GetEntity(SlackitExtStoSettings.SlackitSettingsSchema.GetSchema());
 
-                Variables.slackCh = ds.slackCh;
-                Variables.slackChId = ds.slackChId;
-                Variables.slackOn = ds.slackOn;
-                Variables.giphyOn = ds.giphyOn;
-                Variables.slackToken = ds.slackToken;
+                Variables.slackOn = entity.Get<bool>("slackOnField");
+                Variables.slackCh = entity.Get<string>("slackCh");
+                Variables.slackChId = entity.Get<string>("slackChId");
+                Variables.giphyOn = entity.Get<bool>("giphyOn");
+                Variables.slackToken = entity.Get<string>("slackToken");
             }
-
-            catch
+            else
             {
                 Variables.slackCh = null;
                 Variables.slackChId = null;
                 Variables.slackOn = false;
                 Variables.slackToken = null;
             }
-
             #endregion
 
             #region Slack Post: Opened central model
@@ -361,7 +394,7 @@ namespace SlackitRevit
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
 
-                Sandbox.Program.Main(logPath);
+                Charting.Program.Main(logPath);
                 string upload_response = slackClient.UploadFile(@"C:\Temp\chart.png", channel).Content;
                 var uploadresp = JsonConvert.DeserializeObject<UploadResponse>(upload_response);
 
