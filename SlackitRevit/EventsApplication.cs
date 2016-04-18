@@ -87,7 +87,7 @@ namespace SlackitRevit
 
             //    SlackSettings ds = JsonConvert.DeserializeObject<SlackSettings>(st);
 
-                
+
 
             //    Variables.slackCh = ds.slackCh;
             //    Variables.slackChId = ds.slackChId;
@@ -107,34 +107,7 @@ namespace SlackitRevit
             #endregion
 
             #region Load settings if they exist (Extensible Storage)
-            ExtensibleStorageFilter fi
-              = new ExtensibleStorageFilter(
-                  SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid);
-            
-            DataStorage dataStorage
-                = new FilteredElementCollector(doc)
-                .OfClass(typeof(DataStorage))
-                .WherePasses(fi)
-                .Where<Element>(el => Variables.defNameSettings.Equals(el.Name))
-                .FirstOrDefault<Element>() as DataStorage;
-
-            if ( dataStorage != null)
-            {
-                Entity entity = dataStorage.GetEntity(SlackitExtStoSettings.SlackitSettingsSchema.GetSchema());
-
-                Variables.slackOn = entity.Get<bool>("slackOnField");
-                Variables.slackCh = entity.Get<string>("slackCh");
-                Variables.slackChId = entity.Get<string>("slackChId");
-                Variables.giphyOn = entity.Get<bool>("giphyOn");
-                Variables.slackToken = entity.Get<string>("slackToken");
-            }
-            else
-            {
-                Variables.slackCh = null;
-                Variables.slackChId = null;
-                Variables.slackOn = false;
-                Variables.slackToken = null;
-            }
+            GetParameters.Load(doc);
             #endregion
 
             #region Slack Post: Opened central model
@@ -329,6 +302,11 @@ namespace SlackitRevit
             string logPath = folder + "\\fileSizelog.csv";
             Debug.Print(logPath);
             File.AppendAllText(logPath, csv.ToString());
+
+            #region
+            GetParameters.Load(doc);
+            #endregion
+
 
             #region Report Differences after Sync
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);

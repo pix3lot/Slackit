@@ -16,6 +16,7 @@ using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using System.Collections.Generic;
 #endregion // Namespaces
 
 namespace SlackitRevit
@@ -51,25 +52,22 @@ namespace SlackitRevit
 
                     schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
 
-                    schemaBuilder.SetWriteAccessLevel(AccessLevel.Vendor);
+                    schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
 
                     schemaBuilder.AddSimpleField(
-                      "Guid", typeof(Guid));
+                        "slackOn", typeof(Boolean));
 
                     schemaBuilder.AddSimpleField(
-                        "SlackOn", typeof(Boolean));
+                        "giphyOn", typeof(Boolean));
 
                     schemaBuilder.AddSimpleField(
-                        "GiphyOn", typeof(Boolean));
+                        "slackToken", typeof(String));
 
                     schemaBuilder.AddSimpleField(
-                        "SlackToken", typeof(String));
+                        "slackCh", typeof(String));
 
                     schemaBuilder.AddSimpleField(
-                        "SlackCh", typeof(String));
-
-                    schemaBuilder.AddSimpleField(
-                        "SlackChId", typeof(String));
+                        "slackChId", typeof(String));
 
                     schema = schemaBuilder.Finish();
                 }
@@ -102,21 +100,22 @@ namespace SlackitRevit
                     dataStorage = DataStorage.Create(doc);
                     dataStorage.Name = name;
 
-                    entity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
-                    entity.Set("SlackOn", false);
-
+                    // ntity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
+                    //entity.Set("SlackOn", false);
+                    entity = new Entity(SlackitSettingsSchema.GetSchema());
                     dataStorage.SetEntity(entity);
 
                     t.Commit();
                 }
             }
-            else {
-                entity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
-                
-            }
+
+            Transaction updateSettings = new Transaction(doc, "Update settings");
+            updateSettings.Start();
+            entity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
+            
             
             Schema settingSchema = entity.Schema;
-
+            IList<Field> fields = settingSchema.ListFields();
             Field slackOnField = settingSchema.GetField("slackOn");
             Field giphyOnField = settingSchema.GetField("giphyOn");
             Field slackTokenField = settingSchema.GetField("slackToken");
@@ -124,12 +123,56 @@ namespace SlackitRevit
             Field slackChIdField = settingSchema.GetField("slackChId");       
          
             entity.Set(slackOnField, s.slackOn);
+            Debug.Print(entity.Get<bool>(slackOnField).ToString());
             entity.Set(giphyOnField, s.giphyOn);
             entity.Set(slackTokenField, s.slackToken);
+            Debug.Print(entity.Get<string>(slackTokenField));
             entity.Set(slackChField, s.slackCh);
             entity.Set(slackChIdField, s.slackChId);
 
-        
+            dataStorage.SetEntity(entity);
+            updateSettings.Commit();
+        }
+    }
+
+        public static class GetParameters
+    {
+        public static void Load(Document doc) { 
+        ExtensibleStorageFilter fi
+              = new ExtensibleStorageFilter(
+                  SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid);
+
+        DataStorage dataStorage
+            = new FilteredElementCollector(doc)
+            .OfClass(typeof(DataStorage))
+            .WherePasses(fi)
+            .Where<Element>(el => Variables.defNameSettings.Equals(el.Name))
+            .FirstOrDefault<Element>() as DataStorage;
+
+            if (dataStorage != null)
+            {
+                Entity entity = dataStorage.GetEntity(Schema.Lookup(SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid));
+                using (Transaction t = new Transaction(doc, "Get Extensible Storage Data"))
+                {
+                    t.Start();
+                    // entity.Schema.GetField("slca")
+                    // entity.Get<bool>()
+                    Variables.slackOn = entity.Get<bool>("slackOn");
+                    Debug.Print(entity.Get<bool>("slackOn").ToString());
+                    Variables.slackCh = entity.Get<string>("slackCh");
+                    Variables.slackChId = entity.Get<string>("slackChId");
+                    Variables.giphyOn = entity.Get<bool>("giphyOn");
+                    Variables.slackToken = entity.Get<string>("slackToken");
+                    t.Commit();
+                }
+            }
+            else
+            {
+                Variables.slackCh = null;
+                Variables.slackChId = null;
+                Variables.slackOn = false;
+                Variables.slackToken = null;
+            }
         }
     }
 }
