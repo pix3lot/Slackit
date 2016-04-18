@@ -1,5 +1,5 @@
 ﻿#region Header
-// Based on:
+// Based on: https://github.com/jeremytammik/the_building_coder_samples/blob/master/BuildingCoder/BuildingCoder/JtNamedGuidStorage.cs
 // JtNamedGuidStorage.cs - implement named Guid storage, e.g. for a globally unique project identifier
 //
 // Copyright (C) 2010-2016 by Jeremy Tammik, Autodesk Inc. All rights reserved.
@@ -10,24 +10,18 @@
 
 #region Namespaces
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
-using System.Collections.Generic;
 #endregion // Namespaces
 
 namespace SlackitRevit
 {
-    class SlackitExtStoSettings
+    class ExtensibleStorage
     {
-        /// <summary>
-        /// The extensible storage schema, 
-        /// containing one single Guid field.
-        /// </summary>
-        public static class SlackitSettingsSchema
+
+        public static class SettingsSchema
         {
             public readonly static Guid SchemaGuid = new Guid(
               "{B9FBF728-2A8F-43EA-B57A-F2A1D1E5855A}");
@@ -37,7 +31,7 @@ namespace SlackitRevit
             /// or optionally create a new one if it does
             /// not yet exist.
             /// </summary>
-            public static Schema GetSchema(
+            public static Schema InitializeSchema(
               bool create = true)
             {
                 Schema schema = Schema.Lookup(SchemaGuid);
@@ -75,13 +69,48 @@ namespace SlackitRevit
             }
         }
 
-        public static void SetParameters( Application app, Document doc, string name, SlackSettings s)
+    }
+
+    public static class ParameterCommands
+    {
+        public static void Load(Document doc)
+        {
+            ExtensibleStorageFilter fi
+                  = new ExtensibleStorageFilter(
+                      ExtensibleStorage.SettingsSchema.SchemaGuid);
+
+            DataStorage dataStorage
+                = new FilteredElementCollector(doc)
+                .OfClass(typeof(DataStorage))
+                .WherePasses(fi)
+                .Where<Element>(el => Variables.defNameSettings.Equals(el.Name))
+                .FirstOrDefault<Element>() as DataStorage;
+
+            if (dataStorage != null)
+            {
+                Entity entity = dataStorage.GetEntity(Schema.Lookup(ExtensibleStorage.SettingsSchema.SchemaGuid));
+                Variables.slackOn = entity.Get<bool>("slackOn");
+                Variables.slackCh = entity.Get<string>("slackCh");
+                Variables.slackChId = entity.Get<string>("slackChId");
+                Variables.giphyOn = entity.Get<bool>("giphyOn");
+                Variables.slackToken = entity.Get<string>("slackToken");
+            }
+            else
+            {
+                Variables.slackCh = null;
+                Variables.slackChId = null;
+                Variables.slackOn = false;
+                Variables.slackToken = null;
+            }
+        }
+
+        public static void Set(Application app, Document doc, string name, SlackSettings s)
         {
 
 
             ExtensibleStorageFilter f
                 = new ExtensibleStorageFilter(
-                    SlackitSettingsSchema.SchemaGuid);
+                    ExtensibleStorage.SettingsSchema.SchemaGuid);
 
             DataStorage dataStorage
                 = new FilteredElementCollector(doc)
@@ -100,9 +129,7 @@ namespace SlackitRevit
                     dataStorage = DataStorage.Create(doc);
                     dataStorage.Name = name;
 
-                    // ntity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
-                    //entity.Set("SlackOn", false);
-                    entity = new Entity(SlackitSettingsSchema.GetSchema());
+                    entity = new Entity(ExtensibleStorage.SettingsSchema.InitializeSchema());
                     dataStorage.SetEntity(entity);
 
                     t.Commit();
@@ -111,68 +138,16 @@ namespace SlackitRevit
 
             Transaction updateSettings = new Transaction(doc, "Update settings");
             updateSettings.Start();
-            entity = dataStorage.GetEntity(SlackitSettingsSchema.GetSchema());
-            
-            
-            Schema settingSchema = entity.Schema;
-            IList<Field> fields = settingSchema.ListFields();
-            Field slackOnField = settingSchema.GetField("slackOn");
-            Field giphyOnField = settingSchema.GetField("giphyOn");
-            Field slackTokenField = settingSchema.GetField("slackToken");
-            Field slackChField = settingSchema.GetField("slackCh");
-            Field slackChIdField = settingSchema.GetField("slackChId");       
-         
-            entity.Set(slackOnField, s.slackOn);
-            Debug.Print(entity.Get<bool>(slackOnField).ToString());
-            entity.Set(giphyOnField, s.giphyOn);
-            entity.Set(slackTokenField, s.slackToken);
-            Debug.Print(entity.Get<string>(slackTokenField));
-            entity.Set(slackChField, s.slackCh);
-            entity.Set(slackChIdField, s.slackChId);
+            entity = dataStorage.GetEntity(ExtensibleStorage.SettingsSchema.InitializeSchema());
+
+            entity.Set("slackOn", s.slackOn);
+            entity.Set("giphyOn", s.giphyOn);
+            entity.Set("slackToken", s.slackToken);
+            entity.Set("slackCh", s.slackCh);
+            entity.Set("slackChId", s.slackChId);
 
             dataStorage.SetEntity(entity);
             updateSettings.Commit();
-        }
-    }
-
-        public static class GetParameters
-    {
-        public static void Load(Document doc) { 
-        ExtensibleStorageFilter fi
-              = new ExtensibleStorageFilter(
-                  SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid);
-
-        DataStorage dataStorage
-            = new FilteredElementCollector(doc)
-            .OfClass(typeof(DataStorage))
-            .WherePasses(fi)
-            .Where<Element>(el => Variables.defNameSettings.Equals(el.Name))
-            .FirstOrDefault<Element>() as DataStorage;
-
-            if (dataStorage != null)
-            {
-                Entity entity = dataStorage.GetEntity(Schema.Lookup(SlackitExtStoSettings.SlackitSettingsSchema.SchemaGuid));
-                using (Transaction t = new Transaction(doc, "Get Extensible Storage Data"))
-                {
-                    t.Start();
-                    // entity.Schema.GetField("slca")
-                    // entity.Get<bool>()
-                    Variables.slackOn = entity.Get<bool>("slackOn");
-                    Debug.Print(entity.Get<bool>("slackOn").ToString());
-                    Variables.slackCh = entity.Get<string>("slackCh");
-                    Variables.slackChId = entity.Get<string>("slackChId");
-                    Variables.giphyOn = entity.Get<bool>("giphyOn");
-                    Variables.slackToken = entity.Get<string>("slackToken");
-                    t.Commit();
-                }
-            }
-            else
-            {
-                Variables.slackCh = null;
-                Variables.slackChId = null;
-                Variables.slackOn = false;
-                Variables.slackToken = null;
-            }
         }
     }
 }

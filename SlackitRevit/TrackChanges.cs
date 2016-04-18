@@ -30,58 +30,7 @@ namespace TrackChanges
             return bytes;
         }
 
-        #region OBSOLETE
-        /// <summary>
-        /// Define a project identifier for the 
-        /// given Revit document.
-        /// </summary>
-        public static string GetProjectIdentifier(
-          Document doc)
-        {
-            SHA256 hasher = SHA256Managed.Create();
-
-            string key = System.Environment.MachineName
-              + ":" + doc.PathName;
-
-            byte[] hashValue = hasher.ComputeHash(GetBytes(
-              key));
-
-            string hashb64 = Convert.ToBase64String(
-              hashValue);
-
-            return hashb64.Replace('/', '_');
-        }
-        #endregion // OBSOLETE
-
-        /// <summary>
-        /// Return a string for a real number
-        /// formatted to two decimal places.
-        /// </summary>
-        public static string RealString(double a)
-        {
-            return a.ToString("0.##");
-        }
-
-
-        /// <summary>
-        /// Return a JSON string representing a dictionary
-        /// of the given parameter names and values.
-        /// </summary>
-        public static string GetPropertiesJson(
-          IList<Parameter> parameters)
-        {
-            int n = parameters.Count;
-            List<string> a = new List<string>(n);
-            foreach (Parameter p in parameters)
-            {
-                a.Add(string.Format("\"{0}\":\"{1}\"",
-                  p.Definition.Name, p.AsValueString()));
-            }
-            a.Sort();
-            string s = string.Join(",", a);
-            return "{" + s + "}";
-        }
-
+        
         /// <summary>
         /// Return a string describing the given element:
         /// .NET type name,
@@ -327,9 +276,6 @@ namespace TrackChanges
             if (null == _start_state)
             {
                 _start_state = GetSnapshot(a);
-                //TaskDialog.Show( "Track Changes",
-                // "Started tracking changes now." );
-                //SlackitRevit.EventsApplication.pinnedResults();
             }
             else
             {

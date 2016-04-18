@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
-using Autodesk;
 using Giphy;
 using Slack;
 using Newtonsoft.Json;
@@ -25,8 +22,6 @@ namespace SlackitRevit
         List<string> msgts_model = new List<string>();
         List<string> msgts_ws = new List<string>();
         Dictionary<int, string> _start_state = null;
-        IEnumerable<Element> a = null;
-        //List<string> msgts_pin = new List<string>();
 
         public Result OnStartup(UIControlledApplication uicapp)
         {
@@ -60,7 +55,7 @@ namespace SlackitRevit
             BasicFileInfo fileInfo = BasicFileInfo.Extract(path);
             FileInfo f = new FileInfo(path);
             
-            Variables.logComputerName = System.Environment.MachineName;
+            Variables.logComputerName = Environment.MachineName;
             Variables.logChangesSaved = fileInfo.AllLocalChangesSavedToCentral;
             Variables.logFileCentral = fileInfo.CentralPath;
             Variables.logFileCentralName = Path.GetFileName(Variables.logFileCentral);
@@ -78,36 +73,9 @@ namespace SlackitRevit
             Variables.logVersionNumber = app.VersionNumber;
             #endregion
 
-            #region Load settings if they exist (Shared Parameters)
-            //Element el = Collectors.GetProjectInfoElem(doc);
-
-            //try
-            //{
-            //    string st = el.LookupParameter(Variables.defNameSettings).AsString();
-
-            //    SlackSettings ds = JsonConvert.DeserializeObject<SlackSettings>(st);
-
-
-
-            //    Variables.slackCh = ds.slackCh;
-            //    Variables.slackChId = ds.slackChId;
-            //    Variables.slackOn = ds.slackOn;
-            //    Variables.giphyOn = ds.giphyOn;
-            //    Variables.slackToken = ds.slackToken;
-            //}
-
-            //catch
-            //{
-            //    Variables.slackCh = null;
-            //    Variables.slackChId = null;
-            //    Variables.slackOn = false;
-            //    Variables.slackToken = null;
-            //}
-
-            #endregion
 
             #region Load settings if they exist (Extensible Storage)
-            GetParameters.Load(doc);
+            ParameterCommands.Load(doc);
             #endregion
 
             #region Slack Post: Opened central model
@@ -119,10 +87,14 @@ namespace SlackitRevit
 
                 if (patheq && Variables.logIsWorkshared)
                 {
-                    var giphyClient = new GiphyClient();
-                    string gif_msg = giphyClient.GetRandomGif("Alarm").Content;
-                    var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
-                    string gif_url = gif_resp.data.image_url;
+                    string gif_url = null;
+                    if (Variables.giphyOn)
+                    {
+                        var giphyClient = new GiphyClient();
+                        string gif_msg = giphyClient.GetRandomGif("Alarm").Content;
+                        var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
+                        gif_url = gif_resp.data.image_url;
+                    }
 
                     var slackClient = new SlackClient(Variables.slackToken);
 
@@ -130,8 +102,6 @@ namespace SlackitRevit
                     string channel = Variables.slackChId;
                     string botname = "Worksharing Warning";
                     string icon_url = Variables.icon_revit;
-
-                    if (!Variables.giphyOn) { gif_url = null; };
 
                     var attachments = new Attachments
                     {
@@ -160,8 +130,7 @@ namespace SlackitRevit
                                 }
                             },
                             image_url = gif_url
-                        //image_url = Slack.Constants.image_url_warning
-                        //thumb_url = Slack.Constants.thumb_url_warning
+                      
 
                     };
                     
@@ -184,20 +153,13 @@ namespace SlackitRevit
             {
 
                 var slackClient = new SlackClient(Variables.slackToken);
-
-                //Delete previous synching message
-                //slackClient.DeleteMessage(msgts_pin, Variables.slackCh);
-                //msgts_pin.Clear();
-                
-                //Post synched message
+                                
+                //Post pinned elements message
                 string text = "";
                 string channel = Variables.slackChId;
                 string botname = "Pinning Info";
-                //string parse = null;
-                //bool linkNames = false;
-                //bool unfurl_links = false;
                 string icon_url = Variables.icon_revit;
-                //string icon_emoji = null;    
+  
 
                 var attachments = new Attachments
                 {
@@ -223,6 +185,7 @@ namespace SlackitRevit
             #endregion
 
         }
+
         private void appDocSynching(object sender, Autodesk.Revit.DB.Events.DocumentSynchronizingWithCentralEventArgs e)
         {
             Variables.logSyncStart = DateTime.Now;
@@ -233,8 +196,6 @@ namespace SlackitRevit
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
             Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
             var first = end_state.First();
-            string msg = first.Value;
-            Debug.Print("END STATE: " + msg);
             string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
             _start_state = TrackChanges.Command.GetSnapshot(a);
             #endregion
@@ -291,20 +252,17 @@ namespace SlackitRevit
             BasicFileInfo fileInfo = BasicFileInfo.Extract(path);
 
             FileInfo f = new FileInfo(fileInfo.CentralPath);
-            var size = f.Length / 1000000;
-            int intsize = Convert.ToInt32(size);
+            string size = Convert.ToInt32(f.Length / 1000000).ToString();
             string folder = f.DirectoryName;
             var csv = new StringBuilder();
             var date = DateTime.Now.ToString();
-            var stringSize = intsize.ToString();
-            var newLine = string.Format("{0},{1}", date, stringSize);
+            var newLine = string.Format("{0},{1}", date, size);
             csv.AppendLine(newLine);
             string logPath = folder + "\\fileSizelog.csv";
-            Debug.Print(logPath);
             File.AppendAllText(logPath, csv.ToString());
 
-            #region Reload settings from 
-            GetParameters.Load(doc);
+            #region Reload settings from Extensible Storage
+            ParameterCommands.Load(doc);
             #endregion
 
 
@@ -312,8 +270,6 @@ namespace SlackitRevit
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
             Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
             var first = end_state.First();
-            string msg = first.Value;
-            Debug.Print("END STATE: " + msg);
             string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
             _start_state = TrackChanges.Command.GetSnapshot(a);
 
@@ -323,11 +279,14 @@ namespace SlackitRevit
 
             if (Variables.slackOn)
             {
-                var giphyClient = new GiphyClient();
-                string gif_msg = giphyClient.GetRandomGif("ThumbsUp").Content;
-                var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
-                string gif_url = gif_resp.data.image_url;
-
+                string gif_url = null;
+                if (Variables.giphyOn)
+                {
+                    var giphyClient = new GiphyClient();
+                    string gif_msg = giphyClient.GetRandomGif("ThumbsUp").Content;
+                    var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
+                    gif_url = gif_resp.data.image_url;
+                }
                 var slackClient = new SlackClient(Variables.slackToken);
 
                 //Delete previous synching message
@@ -338,12 +297,7 @@ namespace SlackitRevit
                 string text = "";
                 string channel = Variables.slackChId;
                 string botname = "Synching Info";
-                //string parse = null;
-                //bool linkNames = false;
-                //bool unfurl_links = false;
                 string icon_url = Variables.icon_revit;
-                //string icon_emoji = null;    
-                if (!Variables.giphyOn) { gif_url = null; };
 
                 var attachments = new Attachments
                 {
@@ -371,7 +325,7 @@ namespace SlackitRevit
                 
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
-
+                //File size chart
                 Charting.Program.Main(logPath);
                 string upload_response = slackClient.UploadFile(@"C:\Temp\chart.png", channel).Content;
                 var uploadresp = JsonConvert.DeserializeObject<UploadResponse>(upload_response);
@@ -397,22 +351,23 @@ namespace SlackitRevit
 
             if (Variables.slackOn)
             {
-                if (fileInfo.AllLocalChangesSavedToCentral == false)//Variables.logChangesSaved == false)
+                if (fileInfo.AllLocalChangesSavedToCentral == false)
                 {
-                    var giphyClient = new GiphyClient();
-                    string gif_msg = giphyClient.GetRandomGif("Disappointed").Content;
-                    var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
-                    string gif_url = gif_resp.data.image_url;
-
+                    string gif_url = null;
+                    if (Variables.giphyOn)
+                    {
+                        var giphyClient = new GiphyClient();
+                        string gif_msg = giphyClient.GetRandomGif("Disappointed").Content;
+                        var gif_resp = JsonConvert.DeserializeObject<Giphy.Response>(gif_msg);
+                        gif_url = gif_resp.data.image_url;
+                    }
                     var slackClient = new SlackClient(Variables.slackToken);
 
                     string text = "";
                     string channel = Variables.slackChId;
                     string botname = "Worksharing Warning";
                     string icon_url = Variables.icon_revit;
-
-                    if (!Variables.giphyOn) { gif_url = null; };
-
+                    
                     var attachments = new Attachments
                     {
                         fallback = Variables.logUsername + "did not save to central before closing",

@@ -73,8 +73,6 @@ namespace SlackitRevit
         public static string logSyncComments { get; set; }
 
         public static string defNameSettings = "SlackitSettings";
-        public static string spFilePath = dir_temp + "sp.txt";
-        public static string groupName = "Slackit";
     }
    
 }
