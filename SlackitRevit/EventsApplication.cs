@@ -303,7 +303,7 @@ namespace SlackitRevit
             Debug.Print(logPath);
             File.AppendAllText(logPath, csv.ToString());
 
-            #region
+            #region Reload settings from 
             GetParameters.Load(doc);
             #endregion
 
@@ -381,6 +381,7 @@ namespace SlackitRevit
 
 
         }
+       
 
         private void appDocClosing(object sender, Autodesk.Revit.DB.Events.DocumentClosingEventArgs e)
         {

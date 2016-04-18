@@ -22,13 +22,15 @@ namespace SlackitRevit
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Document doc = commandData.Application.ActiveUIDocument.Document;
+            GetParameters.Load(doc);
             SlackForm slackForm = new SlackForm();
 
             slackForm.ShowDialog();
 
             if (slackForm.DialogResult == DialogResult.OK)
             {
-                Document doc = commandData.Application.ActiveUIDocument.Document;
+                //Document doc = commandData.Application.ActiveUIDocument.Document;
                 Autodesk.Revit.ApplicationServices.Application app = doc.Application;
 
                 if (doc.IsFamilyDocument)
