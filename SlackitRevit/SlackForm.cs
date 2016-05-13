@@ -20,7 +20,15 @@ namespace SlackitRevit
         private BindingList<String> bList;
 
         internal bool enabled { get; set; }
-        internal bool giphyEnabled { get; set;  }
+        internal bool slackWSWarn { get; set; }
+        internal bool slackModelWarn { get; set; }
+        internal bool slackBPWarn { get; set; }
+        internal bool slackWSInfo { get; set; }
+        internal bool slackModelInfo { get; set; }
+        internal bool slackBPInfo { get; set; }
+        internal bool slackExtraTrackPin { get; set; }
+        internal int giphySet { get; set;  }
+        internal int tidySet { get; set; }
         internal string channel { get; set; }
         internal string channelid { get; set; }
         private string token { get; set; }
@@ -31,7 +39,15 @@ namespace SlackitRevit
         public SlackForm()
         {
             enabled = Variables.slackOn;
-            giphyEnabled = Variables.giphyOn;
+            slackWSWarn = Variables.slackWSWarn;
+            slackModelWarn = Variables.slackModelWarn;
+            slackBPWarn = Variables.slackBPWarn;
+            slackWSInfo = Variables.slackWSInfo;
+            slackModelInfo = Variables.slackModelInfo;
+            slackBPInfo = Variables.slackBPInfo;
+            slackExtraTrackPin = Variables.slackExtraTrackPin;
+            giphySet = Variables.giphySet;
+            tidySet = Variables.tidySet;
             channel = Variables.slackCh;
             channelid = Variables.slackChId;
             token = Variables.slackToken;
@@ -55,7 +71,16 @@ namespace SlackitRevit
             textbox_token.Text = token;
             combobox_channels.SelectedItem = channel;
             checkbox_enable.Checked = enabled;
-            checkBox_gifs.Checked = giphyEnabled;
+            checkbox_model_warn.Checked = slackModelWarn;
+            checkbox_ws_warn.Checked = slackWSWarn;
+            checkbox_bp_warn.Checked = slackBPWarn;
+            checkbox_model_info.Checked = slackModelInfo;
+            checkbox_ws_info.Checked = slackWSInfo;
+            checkbox_bp_info.Checked = slackBPInfo;
+            checkbox_extra_trackpin.Checked = slackExtraTrackPin;
+            combobox_giphy.SelectedIndex = giphySet;
+            combobox_tidy.SelectedIndex = tidySet;
+            
 
         }
 
@@ -73,7 +98,15 @@ namespace SlackitRevit
                 Variables.slackCh = s;
                 Variables.slackChId = id;
                 Variables.slackOn = checkbox_enable.Checked;
-                Variables.giphyOn = checkBox_gifs.Checked;
+                Variables.slackWSWarn = checkbox_ws_warn.Checked;
+                Variables.slackModelWarn = checkbox_model_warn.Checked;
+                Variables.slackBPWarn = checkbox_bp_warn.Checked;
+                Variables.slackWSInfo = checkbox_ws_info.Checked;
+                Variables.slackModelInfo = checkbox_model_info.Checked;
+                Variables.slackBPInfo = checkbox_bp_info.Checked;
+                Variables.slackExtraTrackPin = checkbox_extra_trackpin.Checked;
+                Variables.giphySet = combobox_giphy.SelectedIndex;
+                Variables.tidySet = combobox_tidy.SelectedIndex;
                 Variables.slackToken = token;
              }
             catch
@@ -134,5 +167,11 @@ namespace SlackitRevit
             ch_list = ch_name;
             ch_dict = ch_name_id;
         }
+
+        private void link_token_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://api.slack.com/docs/oauth-test-tokens");
+        }
+
     }
  }

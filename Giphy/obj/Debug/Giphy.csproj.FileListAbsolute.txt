@@ -10,12 +10,6 @@ C:\Users\bmuller\Desktop\Slackit\Giphy\bin\Debug\RestSharp.dll
 C:\Users\bmuller\Desktop\Slackit\Giphy\bin\Debug\RestSharp.xml
 C:\Users\bmuller\Desktop\Slackit\Giphy\obj\Debug\Giphy.dll
 C:\Users\bmuller\Desktop\Slackit\Giphy\obj\Debug\Giphy.pdb
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\bin\Debug\Giphy.dll
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\bin\Debug\Giphy.pdb
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\bin\Debug\RestSharp.dll
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\bin\Debug\RestSharp.xml
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\obj\Debug\Giphy.dll
-C:\Users\bmuller\Documents\GitHub\Slackit\Giphy\obj\Debug\Giphy.pdb
 C:\Users\dsiroky\Source\Repos\Slackit\Giphy\bin\Debug\Giphy.dll
 C:\Users\dsiroky\Source\Repos\Slackit\Giphy\bin\Debug\Giphy.pdb
 C:\Users\dsiroky\Source\Repos\Slackit\Giphy\bin\Debug\RestSharp.dll
