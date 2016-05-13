@@ -24,9 +24,11 @@ Messages included so far:
 Screenshot button sends full screenshot to project channel
 
 ##Future development
-Include groups and DMs
-Ability to post custom messages built into the Revit ribbon
-Attach to database to track project file health long term
+
+Misc
+  * Include groups and DMs
+  * Post messages to/from Revit ribbon
+  * Attach to database to track project file health long term
 
 More messaging options 
   * Open/sync takes too long
