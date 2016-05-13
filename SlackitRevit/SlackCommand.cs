@@ -1,16 +1,8 @@
 ﻿#region Namespaces
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
-using System.Windows.Interop;
-using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Slack;
-using RestSharp;
-using Newtonsoft.Json;
 
 #endregion
 
@@ -22,13 +14,14 @@ namespace SlackitRevit
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            Document doc = commandData.Application.ActiveUIDocument.Document;
+            ParameterCommands.Load(doc);
             SlackForm slackForm = new SlackForm();
 
             slackForm.ShowDialog();
 
             if (slackForm.DialogResult == DialogResult.OK)
             {
-                Document doc = commandData.Application.ActiveUIDocument.Document;
                 Autodesk.Revit.ApplicationServices.Application app = doc.Application;
 
                 if (doc.IsFamilyDocument)
@@ -40,11 +33,18 @@ namespace SlackitRevit
                 s.slackCh = Variables.slackCh;
                 s.slackChId = Variables.slackChId;
                 s.slackOn = Variables.slackOn;
-                s.giphyOn = Variables.giphyOn;
+                s.slackWSWarn = Variables.slackWSWarn;
+                s.slackModelWarn = Variables.slackModelWarn;
+                s.slackBPWarn = Variables.slackBPWarn;
+                s.slackWSInfo = Variables.slackWSInfo;
+                s.slackModelInfo = Variables.slackModelInfo;
+                s.slackBPInfo = Variables.slackBPInfo;
+                s.slackExtraTrackPin = Variables.slackExtraTrackPin;
+                s.tidySet = Variables.tidySet;
+                s.giphySet = Variables.giphySet;
                 s.slackToken = Variables.slackToken;
 
-                SharedParam.SetParameter(app, doc, Variables.defNameSettings, JsonConvert.SerializeObject(s).ToString());
-
+                ParameterCommands.Set(app, doc, Variables.defNameSettings, s);
             }
             return Result.Succeeded;
         }
