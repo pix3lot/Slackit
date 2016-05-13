@@ -10,22 +10,25 @@ Run the plugin and enter the token to your Slack site. Select the Slack channel 
 ##Current function
 Messages are sent to a specified channel (no groups or DMs yet)
 
-Random gifs (via Giphy) are embedded into the messages by keywords search
+Random gifs (via Giphy) are embedded into the messages by keywords search.
+GIF can be large, small, or turned off
 
 Messages included so far:
 * Synch to Central started
 * Synch to Central completed
 * Central model was opened
 * User closed the file without synching to central
+* File Size is > 300MB
+* Pinned Element Tracking
 
 Screenshot button sends full screenshot to project channel
 
 ##Future development
 Include groups and DMs
-
 Ability to post custom messages built into the Revit ribbon
+Attach to database to track project file health long term
 
 More messaging options 
-  * File size
   * Open/sync takes too long
   * Audit type issues (revit warnings & errors, non-standard practices)
+  * Imported DWG files
