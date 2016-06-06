@@ -217,7 +217,7 @@ namespace SlackitRevit
                         msgts_model.Add(resp.ts);
                     }
                 }
-            #endregion
+                #endregion
 
                 #region Tracking: Start Logging Pinned Elements
                 IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
@@ -276,6 +276,13 @@ namespace SlackitRevit
             var first = end_state.First();
             string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
             _start_state = TrackChanges.Command.GetSnapshot(a);
+            Fields trackPinSomething = new Fields
+            {
+                title = "Pinned Elements",
+                value = results,
+                @short = true
+            };
+
             #endregion
 
             #region Post: Worksharing Info-Synchronizing to Central
@@ -283,6 +290,10 @@ namespace SlackitRevit
             if (Variables.slackOn && Variables.slackWSWarn)
             {
                 var slackClient = new SlackClient(Variables.slackToken);
+                if (!Variables.slackExtraTrackPin)
+                {
+                    trackPinSomething = null;
+                }
 
                 string text = "";
                 string channel = Variables.slackChId;
@@ -290,10 +301,10 @@ namespace SlackitRevit
                 string icon_url = Variables.icon_revit;
 
                 var attachments = new Attachments
-                    {
-                        fallback = Variables.logUsername + " is synching",
-                        color = "warning",
-                        fields =
+                {
+                    fallback = Variables.logUsername + " is synching",
+                    color = "warning",
+                    fields =
                             new Fields[]
                         {
                             new Fields
@@ -301,9 +312,10 @@ namespace SlackitRevit
                                 title = "Status",
                                 value = Variables.logUsername + " is synching to central [" + Variables.logFileCentralName + "]\nAvoid synching until this is complete.",
                                 @short = true
-                            }
+                            },
+                            trackPinSomething
                         }
-                    };
+                };
 
                 string msg_response = slackClient.PostMessage(text, channel: channel, botName: botname, attachments: attachments, icon_url: icon_url).Content;
                 var resp = JsonConvert.DeserializeObject<ChatPostMessageResponse>(msg_response);
@@ -447,7 +459,7 @@ namespace SlackitRevit
                         color = "danger",
                         fields =
                             new Fields[]
-                            {                                
+                            {
                                 new Fields
                                 {
                                     title = "Description",
