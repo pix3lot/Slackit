@@ -30,7 +30,7 @@ namespace SlackitRevit
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-
+            string TempPath = Path.GetTempPath();
             System.Drawing.Rectangle bounds = Screen.GetBounds(System.Drawing.Point.Empty);
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
@@ -38,10 +38,10 @@ namespace SlackitRevit
                 {
                     g.CopyFromScreen(System.Drawing.Point.Empty, System.Drawing.Point.Empty, bounds.Size);
                 }
-                bitmap.Save(@"C:\Temp\SlackitCapture.jpg", ImageFormat.Jpeg);
+                bitmap.Save(TempPath + "SlackitCapture.jpg", ImageFormat.Jpeg);
             }
 
-            FileStream str = File.OpenRead(@"C:\Temp\SlackitCapture.jpg");
+            FileStream str = File.OpenRead(TempPath + "SlackitCapture.jpg");
             byte[] fBytes = new byte[str.Length];
             str.Read(fBytes, 0, fBytes.Length);
             str.Close();
@@ -64,5 +64,5 @@ namespace SlackitRevit
             return Result.Succeeded;
         }
 
-}
     }
+}
