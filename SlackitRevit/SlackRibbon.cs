@@ -12,12 +12,19 @@ using Autodesk.Revit.UI;
 
 namespace SlackitRevit
 {
-    [Transaction(TransactionMode.Automatic)]
-
     public class SlackRibbon : IExternalApplication
     {
-        const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
-        const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
+        #if RELEASE2015
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
+        #elif RELEASE2016
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
+        #else
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
+
+        #endif
 
         public Result OnStartup(UIControlledApplication app)
         {

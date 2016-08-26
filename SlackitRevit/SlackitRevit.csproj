@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SlackitRevit</RootNamespace>
     <AssemblyName>SlackitRevit</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +30,54 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '2015|AnyCPU' ">
+    <OutputPath>bin\2015\</OutputPath>
+    <DefineConstants>TRACE;RELEASE2015</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2017|AnyCPU'">
+    <OutputPath>bin\2017\</OutputPath>
+    <DefineConstants>TRACE;RELEASE2017</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2016|AnyCPU'">
+    <OutputPath>bin\2016\</OutputPath>
+    <DefineConstants>TRACE;RELEASE2016</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2017Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\2017Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2016Debug|AnyCPU'">
+    <OutputPath>bin\2016Debug\</OutputPath>
+    <DefineConstants>TRACE;RELEASE2016</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2015Debug|AnyCPU'">
+    <OutputPath>bin\2015Debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -39,17 +88,34 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPI">
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == '2015|2015Debug'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RevitAPIUI">
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2015|2015Debug'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == '2016|2016Debug'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2016\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2016|2016Debug'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2016\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == '2017|2017Debug'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2017|2017Debug'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -112,14 +178,36 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)bin\debug\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)bin\debug\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)bin\debug\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)bin\debug\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-copy "$(ProjectDir)bin\debug\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+    <PostBuildEvent>if $(Configuration) == 2015 goto 2015
+if $(Configuration) == 2016 goto 2016
+if $(Configuration) == 2017 goto 2017
+
+:2015
+copy "$(ProjectDir)bin\$(Configuration)\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)bin\$(Configuration)\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)bin\$(Configuration)\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)bin\$(Configuration)\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
+copy "$(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2015"
 copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2015"
-</PostBuildEvent>
+
+:2016
+copy "$(ProjectDir)bin\$(Configuration)\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)bin\$(Configuration)\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)bin\$(Configuration)\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)bin\$(Configuration)\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2016"
+
+:2017
+copy "$(ProjectDir)bin\$(Configuration)\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)bin\$(Configuration)\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)bin\$(Configuration)\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)bin\$(Configuration)\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2017"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Management;
 using System.Collections.Generic;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
@@ -10,10 +11,11 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace SlackitRevit
 {
-    [Transaction(TransactionMode.Automatic)]
+    [Transaction(TransactionMode.Manual)]
 
     public class EventsApplication : IExternalApplication
     {
@@ -23,6 +25,43 @@ namespace SlackitRevit
         List<string> msgts_ws = new List<string>();
         List<string> msgts_extra = new List<string>();
         Dictionary<int, string> _start_state = null;
+
+        public static String GetUNCPath(String path)
+        {
+            path = path.TrimEnd('\\', '/') + Path.DirectorySeparatorChar;
+            DirectoryInfo d = new DirectoryInfo(path);
+            String root = d.Root.FullName.TrimEnd('\\');
+
+            if (!root.StartsWith(@"\\"))
+            {
+                ManagementObject mo = new ManagementObject();
+                mo.Path = new ManagementPath(String.Format("Win32_LogicalDisk='{0}'", root));
+
+                // DriveType 4 = Network Drive
+                if (Convert.ToUInt32(mo["DriveType"]) == 4)
+                    root = Convert.ToString(mo["ProviderName"]);
+                else
+                    root = @"\\" + System.Net.Dns.GetHostName() + "\\" + root.TrimEnd(':') + "$\\";
+            }
+
+            return Recombine(root, d);
+        }
+
+        private static String Recombine(String root, DirectoryInfo d)
+        {
+            Stack s = new Stack();
+            while (d.Parent != null)
+            {
+                s.Push(d.Name);
+                d = d.Parent;
+            }
+
+            while (s.Count > 0)
+            {
+                root = Path.Combine(root, (String)s.Pop());
+            }
+            return root;
+        }
 
         public Result OnStartup(UIControlledApplication uicapp)
         {
@@ -51,21 +90,21 @@ namespace SlackitRevit
             Document doc = e.Document;
 
             #region Variables: Document & Application Variables
-            string path = doc.PathName;
+            string path = GetUNCPath(doc.PathName);
 
             BasicFileInfo fileInfo = BasicFileInfo.Extract(path);
             FileInfo f = new FileInfo(path);
 
             Variables.logComputerName = Environment.MachineName;
             Variables.logChangesSaved = fileInfo.AllLocalChangesSavedToCentral;
-            Variables.logFileCentral = fileInfo.CentralPath;
+            Variables.logFileCentral = GetUNCPath(fileInfo.CentralPath);
             Variables.logFileCentralName = Path.GetFileName(Variables.logFileCentral);
             Variables.logIsCentral = fileInfo.IsCentral;
             Variables.logIsWorkshared = fileInfo.IsWorkshared;
             Variables.logCreatedLocal = fileInfo.IsCreatedLocal;
 
             Variables.logFileName = doc.Title;
-            Variables.logFilePath = doc.PathName;
+            Variables.logFilePath = GetUNCPath(doc.PathName);
             Variables.logFileSize = Convert.ToInt32(f.Length / 1000000);
 
             Variables.logUsername = app.Username;
@@ -80,7 +119,12 @@ namespace SlackitRevit
 
             #region Post: Worksharing Warning-Opened Central Model
             bool patheq = string.Equals(Variables.logFileCentral, Variables.logFilePath);
-
+            Debug.Print("Central Path:" + Variables.logFileCentral);
+            Debug.Print("Current Path:" + Variables.logFilePath);
+            Debug.Print("Equals?:" + patheq);
+            Debug.Print("SlackOn?:" + Variables.slackOn);
+            Debug.Print("SlackWSWarn?:" + Variables.slackWSWarn);
+            Debug.Print("logIsWorkshared?:" + Variables.logIsWorkshared);
             if (Variables.slackOn && Variables.slackWSWarn)
             {
                 if (patheq && Variables.logIsWorkshared)
