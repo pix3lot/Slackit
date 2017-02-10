@@ -275,7 +275,6 @@ namespace SlackitRevit
             #region Extra: Tracking-Report Differences after Sync
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
             Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
-            var first = end_state.First();
             string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
             _start_state = TrackChanges.Command.GetSnapshot(a);
             Fields trackPinSomething = new Fields
@@ -341,7 +340,6 @@ namespace SlackitRevit
             #region Extra: Tracking-Report Differences after Sync
             IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
             Dictionary<int, string> end_state = TrackChanges.Command.GetSnapshot(a);
-            var first = end_state.First();
             string results = TrackChanges.Command.ReportDifferences(doc, _start_state, end_state);
             _start_state = TrackChanges.Command.GetSnapshot(a);
 
