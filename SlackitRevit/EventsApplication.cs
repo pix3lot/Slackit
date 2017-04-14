@@ -75,6 +75,12 @@ namespace SlackitRevit
             Variables.logVersionName = app.VersionName;
             Variables.logVersionNumber = app.VersionNumber;
             #endregion
+            
+            #region Tracking: Start Logging Pinned Elements
+            IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
+            _start_state = TrackChanges.Command.GetSnapshot(a);
+            #endregion
+
 
             #region Settings: Load settings if they exist (Extensible Storage)
             ParameterCommands.Load(doc);
@@ -219,12 +225,6 @@ namespace SlackitRevit
                         msgts_model.Add(resp.ts);
                     }
                 }
-                #endregion
-
-                #region Tracking: Start Logging Pinned Elements
-                IEnumerable<Element> a = TrackChanges.Command.GetTrackedElements(doc);
-                _start_state = TrackChanges.Command.GetSnapshot(a);
-
                 #endregion
 
                 #region Post: Tracking-Pinned Element-Started
