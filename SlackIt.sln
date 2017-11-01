@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slack", "Slack\Slack.csproj", "{14335CA4-2317-4D71-B359-246EF6BCBA53}"
 EndProject
@@ -17,6 +17,8 @@ Global
 		2016Debug|Any CPU = 2016Debug|Any CPU
 		2017|Any CPU = 2017|Any CPU
 		2017Debug|Any CPU = 2017Debug|Any CPU
+		2018|Any CPU = 2018|Any CPU
+		2018Debug|Any CPU = 2018Debug|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -32,6 +34,10 @@ Global
 		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2017|Any CPU.Build.0 = Release|Any CPU
 		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2017Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2017Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2018|Any CPU.ActiveCfg = Release|Any CPU
+		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2018|Any CPU.Build.0 = Release|Any CPU
+		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2018Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14335CA4-2317-4D71-B359-246EF6BCBA53}.2018Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14335CA4-2317-4D71-B359-246EF6BCBA53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14335CA4-2317-4D71-B359-246EF6BCBA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2015|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,6 +52,10 @@ Global
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2017|Any CPU.Build.0 = Release|Any CPU
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2017Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2017Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2018|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2018|Any CPU.Build.0 = Release|Any CPU
+		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2018Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.2018Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEC525CB-62BE-464C-A1C1-31BCDA2A26DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2015|Any CPU.ActiveCfg = 2015|Any CPU
@@ -60,10 +70,17 @@ Global
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2017|Any CPU.Build.0 = 2017|Any CPU
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2017Debug|Any CPU.ActiveCfg = 2017Debug|Any CPU
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2017Debug|Any CPU.Build.0 = 2017Debug|Any CPU
+		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2018|Any CPU.ActiveCfg = 2018|Any CPU
+		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2018|Any CPU.Build.0 = 2018|Any CPU
+		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2018Debug|Any CPU.ActiveCfg = 2018|Any CPU
+		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.2018Debug|Any CPU.Build.0 = 2018|Any CPU
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67A1FA79-ABB7-46A6-B3FF-B586A1A1E9DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E22608A6-1E67-4E33-AF5F-A1EDE5E08970}
 	EndGlobalSection
 EndGlobal

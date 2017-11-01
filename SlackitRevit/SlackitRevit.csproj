@@ -78,6 +78,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2015Debug|AnyCPU'">
     <OutputPath>bin\2015Debug\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '2018|AnyCPU'">
+    <OutputPath>bin\2018\</OutputPath>
+    <DefineConstants>TRACE;RELEASE2018</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -88,16 +97,12 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)' == '2015|2015Debug'">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2015|2015Debug'">
-      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == '2016|2016Debug'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2016\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2016|2016Debug'">
@@ -110,6 +115,10 @@
     </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == '2017|2017Debug'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2017\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2015\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -181,6 +190,7 @@
     <PostBuildEvent>if $(Configuration) == 2015 goto 2015
 if $(Configuration) == 2016 goto 2016
 if $(Configuration) == 2017 goto 2017
+if $(Configuration) == 2018 goto 2018
 
 :2015
 copy "$(ProjectDir)bin\$(Configuration)\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2015"
@@ -207,7 +217,16 @@ copy "$(ProjectDir)bin\$(Configuration)\Giphy.dll" "$(ProgramData)\Autodesk\Revi
 copy "$(ProjectDir)bin\$(Configuration)\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
 copy "$(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2017"
 copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2017"
-copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2017"</PostBuildEvent>
+copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2017"
+
+:2018
+copy "$(ProjectDir)bin\$(Configuration)\SlackitRevit.dll" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)bin\$(Configuration)\Slack.dll" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)bin\$(Configuration)\Giphy.dll" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)bin\$(Configuration)\RestSharp.dll" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)Resources\Slackit.addin" "$(ProgramData)\Autodesk\Revit\Addins\2018"
+copy "$(ProjectDir)Resources\SlackitLogo_32.png" "$(ProgramData)\Autodesk\Revit\Addins\2018"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
