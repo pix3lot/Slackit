@@ -15,18 +15,21 @@ namespace SlackitRevit
     public class SlackRibbon : IExternalApplication
     {
         #if RELEASE2015
-                        const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
-                        const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2015\";
         #elif RELEASE2016
-                        const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
-                        const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2016\";
         #elif RELEASE2017
-                        const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
-                        const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
-        #else
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2017\";
+        #elif RELEASE2018  
                 const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2018\";
                 const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2018\";
-        #endif
+        #else
+                const string assemblyDir = @"C:\ProgramData\Autodesk\Revit\Addins\2019\";
+                const string imageDir = @"C:\ProgramData\Autodesk\Revit\Addins\2019\";
+#endif
 
         public Result OnStartup(UIControlledApplication app)
         {
